@@ -9,7 +9,11 @@
     "48": "icons/border-48.png"
   },
 
-  "permissions": ["activeTab", "storage", "https://*grocy*"],
+  "permissions": [
+    "activeTab",
+    "storage",
+    "https://*/*"
+    ],
 
 
   "browser_action": {
