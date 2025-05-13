@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "Woolies Cart Filler",
+  "version": "0.1",
+
+  "description": "Populates your woolies shopping cart with items from a CSV.",
+
+  "icons": {
+    "48": "icons/border-48.png"
+  },
+
+  "permissions": ["activeTab"],
+
+  "browser_action": {
+    "default_icon": "icons/border-48.png",
+    "default_title": "Fill Cart",
+    "default_popup": "popup/csv_paste.html"
+  },
+
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.woolworths.com.au/*"],
+      "js": ["woolies_cart_filler.js"]
+    }
+  ]
+}
