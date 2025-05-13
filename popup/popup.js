@@ -8,10 +8,13 @@ document.getElementById('grocySubmit').addEventListener('click', () => {
     grocyURL: grocyURL,
     grocyAPIKey: grocyAPIKey
   }).then(() => {
-    alert("Grocy URL and API key saved.");
+    document.getElementById('grocyStatus').textContent = 'Settings saved';
+    document.getElementById('grocyStatus').style.color = 'green';
   }
   ).catch((error) => {
     console.error("Error saving Grocy settings:", error);
+    document.getElementById('grocyStatus').textContent = 'Error saving settings';
+    document.getElementById('grocyStatus').style.color = 'red';
   });
 }
 );
