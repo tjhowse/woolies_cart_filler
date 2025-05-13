@@ -100,12 +100,8 @@ const pollGrocy = async () => {
 // Listen for messages from the popup
 browser.runtime.onMessage.addListener((message) => {
     if (message.type === 'grocyPoll') {
-        const cart_contents = pollGrocy();
-    }
-    if (message.type === 'csvData') {
-      const rows = message.data;
-
       (async () => {
+        const rows = await pollGrocy();
         for (const [count, stockcode] of rows) {
             const quantity = parseInt(count);
             const stockcodeInt = parseInt(stockcode);
