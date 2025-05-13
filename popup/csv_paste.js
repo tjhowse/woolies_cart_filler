@@ -1,23 +1,3 @@
-document.getElementById('submit').addEventListener('click', () => {
-  const csv = document.getElementById('csvText').value.trim();
-  if (!csv) {
-    alert("Please paste CSV data.");
-    return;
-  }
-
-  const rows = csv.split('\n').map(line => line.split(',').map(s => s.trim()));
-  const isHeader = isNaN(parseInt(rows[0][1]));
-  const data = isHeader ? rows.slice(1) : rows;
-
-  // Send the data to the content script
-  browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
-    browser.tabs.sendMessage(tabs[0].id, { type: 'csvData', data });
-  }).catch((error) => {
-    console.error("Error sending message:", error);
-  });
-  // Close the popup
-  window.close();
-});
 
 document.getElementById('grocySubmit').addEventListener('click', () => {
   const grocyURL = document.getElementById('grocyURL').value.trim();
@@ -43,12 +23,13 @@ document.getElementById('grocyPoll').addEventListener('click', () => {
   }).catch((error) => {
     console.error("Error sending message:", error);
   });
+  // Close the popup after sending the message
+  window.close();
 }
 );
 
 // When the page loads, check if the Grocy URL and API key are already saved
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('grocyURL').value = "jizz";
   browser.storage.local.get(['grocyURL', 'grocyAPIKey']).then((result) => {
     if (result.grocyURL) {
       document.getElementById('grocyURL').value = result.grocyURL;

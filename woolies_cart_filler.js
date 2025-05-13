@@ -150,5 +150,9 @@ browser.runtime.onMessage.addListener((message) => {
         }
 
       })();
+      // Refresh the page after filling the cart
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
     }
   });

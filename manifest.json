@@ -3,7 +3,7 @@
   "name": "Woolies Cart Filler",
   "version": "0.1",
 
-  "description": "Populates your woolies shopping cart with items from a CSV.",
+  "description": "Populates your woolies shopping cart with items from grocy.",
 
   "icons": {
     "48": "icons/border-48.png"
