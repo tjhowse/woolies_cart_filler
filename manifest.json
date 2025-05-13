@@ -15,7 +15,7 @@
   "browser_action": {
     "default_icon": "icons/border-48.png",
     "default_title": "Fill Cart",
-    "default_popup": "popup/csv_paste.html"
+    "default_popup": "popup/popup.html"
   },
 
 
