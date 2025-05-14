@@ -20,6 +20,7 @@ This can be found by using browser network tools to view the details of the "upd
 sent to the server when clicking a button that adds a product to your cart. The body of the request
 will look like this:
 
+```json
   {
     "items": [
       {
@@ -35,6 +36,7 @@ will look like this:
       }
     ]
   }
+```
 
 Take the number from the stockcode field and enter it into the userfield for the product in Grocy.
 
