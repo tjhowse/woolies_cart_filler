@@ -146,11 +146,10 @@ browser.runtime.onMessage.addListener((message) => {
 
                 await new Promise(res => setTimeout(res, 100));
             }
-
+            // Refresh the page after filling the cart
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
         })();
-        // Refresh the page after filling the cart
-        setTimeout(() => {
-            window.location.reload();
-        }, 1000);
     }
 });
