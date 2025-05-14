@@ -5,6 +5,8 @@ from your shopping list from [Grocy](https://grocy.info/).
 
 ## Setup
 
+https://youtu.be/jcDqShWlSS8
+
 You will need an existing Grocy installation with an API key configured.
 
 Install this addon into your browser. It will add a toolbar icon. Click the button and populate the
