@@ -12,6 +12,8 @@ You will need an existing Grocy installation with an API key configured.
 Install this addon into your browser. It will add a toolbar icon. Click the button and populate the
 Grocy URL and API key fields, then click "Save Grocy details".
 
+https://addons.mozilla.org/en-US/firefox/addon/woolies-cart-filler/
+
 ### Grocy stockcode
 
 You need to provide a link from your products in Grocy to the item on Woolworths' website. In Grocy,
