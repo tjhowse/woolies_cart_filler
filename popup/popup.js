@@ -1,5 +1,6 @@
 
 document.getElementById('grocySubmit').addEventListener('click', () => {
+  // This saves the Grocy URL and API key to addon storage
   const grocyURL = document.getElementById('grocyURL').value.trim();
   const grocyAPIKey = document.getElementById('grocyAPIKey').value.trim();
 

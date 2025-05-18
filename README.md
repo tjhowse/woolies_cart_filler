@@ -20,29 +20,11 @@ You need to provide a link from your products in Grocy to the item on Woolworths
 create a custom product userfield named "stockcode". For each Grocy product, find the corresponding
 product on Woolworths' website and determine the stockcode for that product.
 
-This can be found by using browser network tools to view the details of the "update" POST request
-sent to the server when clicking a button that adds a product to your cart. The body of the request
-will look like this:
+To find the stockcode, click through to the product detail page and look at the URL. It will be something like:
 
-```json
-  {
-    "items": [
-      {
-        "diagnostics": "4",
-        "evaluateRewardPoints": false,
-        "offerId": null,
-        "priceLevel": null,
-        "profileId": null,
-        "quantity": 1,
-        "searchTerm": null,
-        "source": "ww-sm:homepage.blt-buy again",
-        "stockcode": 142574
-      }
-    ]
-  }
-```
+  https://www.woolworths.com.au/shop/productdetails/27553/country-life-soap-bar-fresh-linen
 
-Take the number from the stockcode field and enter it into the userfield for the product in Grocy.
+The number after `/productdetails/` is the stockcode. Enter it into the userfield for the product in Grocy.
 
 ## Use
 
