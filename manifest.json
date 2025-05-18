@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Woolies Cart Filler",
-  "version": "0.2",
+  "version": "0.3",
 
   "description": "Populates your woolies shopping cart with items from a configured Grocy instance.",
 
