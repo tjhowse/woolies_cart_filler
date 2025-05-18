@@ -6,7 +6,9 @@
   "description": "Populates your woolies shopping cart with items from a configured Grocy instance.",
 
   "icons": {
-    "48": "icons/border-48.png"
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
   },
 
   "permissions": [
@@ -17,7 +19,7 @@
 
 
   "browser_action": {
-    "default_icon": "icons/border-48.png",
+    "default_icon": "icons/icon-48.png",
     "default_title": "Fill Cart",
     "default_popup": "popup/popup.html"
   },
