@@ -46,7 +46,7 @@ const translateProductIdToStockcode = async (productId) => {
             console.error(`No product found for ID: ${productId}`);
             return;
         }
-        return product.userfields.stockcode;
+        return [product.userfields.stockcode, product.name];
     } catch (error) {
         console.error("Error fetching product:", error);
     }
@@ -83,9 +83,11 @@ const pollGrocy = async () => {
             // Translate the product_id to stockcode
             const productId = item.product_id;
             const quantity = item.amount;
-            const stockcode = await translateProductIdToStockcode(productId);
+            const stockcode_name = await translateProductIdToStockcode(productId);
+            const stockcode = stockcode_name[0];
+            const productName = stockcode_name[1];
 
-            return [quantity, stockcode];
+            return [quantity, stockcode, productName];
         }));
 
         return rows;
@@ -96,60 +98,68 @@ const pollGrocy = async () => {
 }
 
 // Listen for messages from the popup
-browser.runtime.onMessage.addListener((message) => {
+browser.runtime.onMessage.addListener(async (message) => {
     if (message.type === 'grocyPoll') {
-        (async () => {
-            const rows = await pollGrocy();
-            for (const [count, stockcode] of rows) {
-                const quantity = parseInt(count);
-                const stockcodeInt = parseInt(stockcode);
-                if (isNaN(quantity) || isNaN(stockcodeInt)) {
-                    console.error(`Invalid data: ${count}, ${stockcode}`);
+        var namesOfMissingStockcodes = [];
+        const rows = await pollGrocy();
+        for (const [count, stockcode, name] of rows) {
+            const quantity = parseInt(count);
+            const stockcodeInt = parseInt(stockcode);
+            if (isNaN(quantity) || isNaN(stockcodeInt)) {
+                console.error(`Invalid data: ${count}, ${stockcode}, ${name}`);
+                if (name && isNaN(stockcodeInt)) {
+                    namesOfMissingStockcodes.push(name);
+                }
+                continue;
+            }
+            const body = {
+                ...requestBodyTemplate,
+                items: [
+                    {
+                        ...requestBodyTemplate.items[0],
+                        stockcode: stockcodeInt,
+                        quantity: quantity
+                    }
+                ]
+            };
+            try {
+                // Send the request with the body to the URL
+
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Accept-Language': 'en-AU',
+                    },
+                    body: JSON.stringify(body)
+                });
+                if (!res.ok) {
+                    console.error(`Error: ${res.status} - ${res.statusText}`);
                     continue;
                 }
-                const body = {
-                    ...requestBodyTemplate,
-                    items: [
-                        {
-                            ...requestBodyTemplate.items[0],
-                            stockcode: stockcodeInt,
-                            quantity: quantity
-                        }
-                    ]
-                };
-                try {
-                    // Send the request with the body to the URL
-
-                    const res = await fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                            'Accept-Language': 'en-AU',
-                        },
-                        body: JSON.stringify(body)
-                    });
-                    if (!res.ok) {
-                        console.error(`Error: ${res.status} - ${res.statusText}`);
-                        continue;
-                    }
-                    const data = await res.json();
-                    if (data.error) {
-                        console.error(`Error: ${data.error}`);
-                        continue;
-                    }
-
-                    console.log(`Sent: ${url} → Status: ${res.status}`);
-                } catch (e) {
-                    console.error(`Failed: ${url}`, e);
+                const data = await res.json();
+                if (data.error) {
+                    console.error(`Error: ${data.error}`);
+                    continue;
                 }
 
-                await new Promise(res => setTimeout(res, 100));
+                console.log(`Sent: ${url} → Status: ${res.status}`);
+            } catch (e) {
+                console.error(`Failed: ${url}`, e);
             }
-            // Refresh the page after filling the cart
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
-        })();
+
+            await new Promise(res => setTimeout(res, 100));
+        }
+        // Refresh the page after filling the cart
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+
+        if (namesOfMissingStockcodes.length > 0) {
+            return { success: false, error: "Missing stockcodes for "+namesOfMissingStockcodes.join(', ') };
+        } else {
+            return { success: true };
+        }
     }
 });

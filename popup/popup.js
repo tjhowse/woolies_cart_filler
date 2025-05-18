@@ -21,19 +21,28 @@ document.getElementById('grocySubmit').addEventListener('click', () => {
 );
 
 document.getElementById('grocyPoll').addEventListener('click', () => {
-  // Send a message to the content script to start polling Grocy
+  // Send a message to the content script to poll Grocy for the shopping list data
   browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
-    browser.tabs.sendMessage(tabs[0].id, { type: 'grocyPoll' });
+    document.getElementById('grocyStatus').textContent = 'Populating shopping cart...';
+    document.getElementById('grocyStatus').style.color = 'blue';
+    browser.tabs.sendMessage(tabs[0].id, { type: 'grocyPoll' }).then((response) => {
+      console.log("Response from content script:", response);
+      // Close the popup after sending the message
+      if (response.success) {
+        window.close();
+      } else {
+        document.getElementById('grocyStatus').textContent = 'Error: ' + response.error;
+        document.getElementById('grocyStatus').style.color = 'red';
+      }
+    });
   }).catch((error) => {
     console.error("Error sending message:", error);
   });
-  // Close the popup after sending the message
-  window.close();
 }
 );
 
-// When the page loads, check if the Grocy URL and API key are already saved
 document.addEventListener('DOMContentLoaded', () => {
+  // When the page loads, check if the Grocy URL and API key are already saved
   browser.storage.local.get(['grocyURL', 'grocyAPIKey']).then((result) => {
     if (result.grocyURL) {
       document.getElementById('grocyURL').value = result.grocyURL;
